@@ -2,7 +2,7 @@ name: Multi-Environment CI/CD Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
     paths:
       - 'apps/**'
       - 'environments/**'

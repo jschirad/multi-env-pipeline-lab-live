@@ -1,13 +1,20 @@
+# Base Kustomization file for the webapp application
+# This file defines the base Kubernetes resources and common configuration
+# Environment-specific overlays will reference this base and apply customizations
+
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+# List of Kubernetes resource files that make up the base application
 resources:
-  - deployment.yaml
-  - service.yaml
-  - configmap.yaml
+  - deployment.yaml   # Main application deployment configuration
+  - service.yaml      # Service definition for network access
+  - configmap.yaml    # Configuration data for the application
 
+# Labels that will be applied to all resources defined in this kustomization
 commonLabels:
-  app: webapp
-  version: v1.0.0
+  app: webapp         # Application identifier label
+  version: v1.0.0     # Version label for tracking deployments
 
+# Default namespace for all resources (can be overridden by overlays)
 namespace: default

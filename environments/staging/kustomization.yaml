@@ -1,30 +1,41 @@
+# Staging Environment Kustomization
+# This overlay customizes the base webapp configuration for the staging environment
+# Staging environment is used for pre-production testing and validation before production deployment
+
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+# Deploy all resources to the 'staging' namespace for environment isolation
 namespace: staging
 
+# Add 'staging-' prefix to all resource names to avoid naming conflicts
 namePrefix: staging-
 
+# Labels applied to all resources in this environment
 commonLabels:
-  environment: staging
-  team: platform
+  environment: staging  # Identifies this as the staging environment
+  team: platform        # Indicates which team owns these resources
 
+# Reference to the base application configuration
 bases:
-  - ../../apps/webapp
+  - ../../apps/webapp   # Path to the base webapp kustomization
 
+# Generate/modify ConfigMap with staging-specific configuration
 configMapGenerator:
   - name: webapp-config
-    behavior: merge
-    literals:
-      - ENVIRONMENT=staging
-      - VERSION=1.0.0-rc
-      - LOG_LEVEL=info
-      - FEATURE_FLAG_NEW_UI=true
+    behavior: merge             # Merge with existing ConfigMap from base
+    literals:                   # Staging-specific configuration values
+      - ENVIRONMENT=staging     # Set environment to staging
+      - VERSION=1.0.0-rc       # Use release candidate version for staging validation
+      - LOG_LEVEL=info         # Standard info logging level for staging
+      - FEATURE_FLAG_NEW_UI=true # Enable new UI features for pre-production testing
 
+# Set replica count for staging environment
 replicas:
   - name: webapp
-    count: 2
+    count: 2           # Two replicas for basic high availability testing
 
+# Customize container images for staging
 images:
   - name: nginxdemos/hello
-    newTag: latest
+    newTag: latest     # Use latest stable tag for staging validation

@@ -1,30 +1,41 @@
+# Development Environment Kustomization
+# This overlay customizes the base webapp configuration for the development environment
+# Dev environment is typically used for active development and testing of new features
+
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+# Deploy all resources to the 'dev' namespace to isolate from other environments
 namespace: dev
 
+# Add 'dev-' prefix to all resource names to avoid naming conflicts
 namePrefix: dev-
 
+# Labels applied to all resources in this environment
 commonLabels:
-  environment: dev
-  team: platform
+  environment: dev     # Identifies this as the development environment
+  team: platform       # Indicates which team owns these resources
 
+# Reference to the base application configuration
 bases:
-  - ../../apps/webapp
+  - ../../apps/webapp  # Path to the base webapp kustomization
 
+# Generate/modify ConfigMap with development-specific configuration
 configMapGenerator:
   - name: webapp-config
-    behavior: merge
-    literals:
-      - ENVIRONMENT=development
-      - VERSION=dev-latest
-      - LOG_LEVEL=debug
-      - FEATURE_FLAG_NEW_UI=true
+    behavior: merge              # Merge with existing ConfigMap from base
+    literals:                    # Development-specific configuration values
+      - ENVIRONMENT=development  # Set environment to development
+      - VERSION=dev-latest       # Use latest development version
+      - LOG_LEVEL=debug         # Enable debug logging for development
+      - FEATURE_FLAG_NEW_UI=true # Enable new UI features for testing
 
+# Override replica count for development environment
 replicas:
   - name: webapp
-    count: 1
+    count: 1           # Single replica is sufficient for development
 
+# Customize container images for development
 images:
   - name: nginxdemos/hello
-    newTag: latest
+    newTag: latest     # Use latest tag for development (more frequent updates)

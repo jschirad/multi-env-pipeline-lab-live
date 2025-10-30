@@ -11,8 +11,7 @@ on:
 jobs:
   # Job 1: Desplegar a Dev (automático)
   deploy-dev:
-    name: 🚀 Deploy a Dev
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    name: 🚀 Deploy a Dev    
     runs-on: self-hosted
     environment:
       name: dev
@@ -43,8 +42,7 @@ jobs:
   # Job 2: Desplegar a Staging 
   deploy-staging:
     name: 🚀 Deploy a Staging
-    needs: deploy-dev
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: deploy-dev    
     runs-on: self-hosted
     environment:
       name: staging
@@ -75,8 +73,7 @@ jobs:
   # Job 6: Desplegar a Producción (requiere aprobación manual)
   deploy-prod:
     name: 🚀 Deploy a Producción
-    needs: deploy-staging
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: deploy-staging  
     runs-on: self-hosted
     environment:
       name: production

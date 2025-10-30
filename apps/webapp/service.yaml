@@ -1,15 +1,19 @@
+# Kubernetes Service for the webapp application
+# Services provide stable networking endpoints for accessing pods
+# This service enables internal cluster communication to the webapp pods
+
 apiVersion: v1
 kind: Service
 metadata:
   name: webapp-service
   labels:
-    app: webapp
+    app: webapp  # Label to associate this service with the webapp application
 spec:
-  type: ClusterIP
+  type: ClusterIP          # ClusterIP makes the service only accessible within the cluster
   selector:
-    app: webapp
+    app: webapp            # Selects pods with the label "app: webapp" to route traffic to
   ports:
-  - port: 80
-    targetPort: http
-    protocol: TCP
-    name: http
+  - port: 80               # Port that the service listens on
+    targetPort: http       # Port on the pod that traffic is forwarded to (named port)
+    protocol: TCP          # Network protocol (TCP/UDP)
+    name: http             # Name for this port (useful when multiple ports exist)

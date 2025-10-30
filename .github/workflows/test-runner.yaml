@@ -1,16 +1,21 @@
+# Workflow to test self-hosted runner connectivity and Kubernetes cluster access
 name: Test Self-Hosted Runner
  
+# Trigger this workflow manually from GitHub UI
 on:
   workflow_dispatch:
  
 jobs:
   test:
     name: Test Runner & Cluster Access
+    # Use self-hosted runner instead of GitHub-hosted runners
     runs-on: self-hosted
     steps:
+      # Clone the repository code to the runner
       - name: Checkout code
         uses: actions/checkout@v4
       
+      # Display basic information about the runner environment
       - name: Check runner environment
         run: |
           echo "🖥️ Información del runner:"
@@ -18,22 +23,26 @@ jobs:
           echo "OS: $(uname -s)"
           echo "Directorio de trabajo: $(pwd)"
       
+      # Verify that kubectl is installed and can connect to the cluster
       - name: Verify kubectl access
         run: |
           echo "🔍 Verificando acceso a Kubernetes..."
           kubectl version --client
           kubectl config current-context
       
+      # List all available namespaces in the Kubernetes cluster
       - name: List Kubernetes namespaces
         run: |
           echo "📦 Namespaces de Kubernetes:"
           kubectl get namespaces
       
+      # Specifically check if our lab environments (dev, staging, prod) exist
       - name: Check our environments
         run: |
           echo "✅ Comprobando los entornos del laboratorio:"
           kubectl get namespace dev staging prod
       
+      # Final success message
       - name: Success!
         run: |
           echo "🎉 ¡El runner funciona y tiene acceso al clúster!"

@@ -2,7 +2,7 @@ name: Multi-Environment CI/CD Pipeline
 
 on:
   push:
-    branches: [main, dev]
+    branches: [main, dev] # Trigger on both main and dev branches
     paths:
       - 'apps/**'
       - 'environments/**'
